@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hey Ta!</title>
+    <link rel="stylesheet" href="query.css" />
+  </head>
+
+  <body>
+    <!-- INTRO SCREEN -->
+    <div id="introScreen">
+      <h2>Hey Agatha!</h2>
+      <p>This page (and the note) supposed to be opened by you alone.</p>
+      <button id="startBtn">Open</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <h1 style="margin-top: 0.5rem">Hey Ta!</h1>
+
+    <p style="max-width: 700px">
+      If you open this page, you must be Agatha! <br />
+      Well, I just want to say a few things to you through this page. <br />
+    </p>
+
+    <!-- ROBOT SPRITE -->
+    <img id="robotImg" src="items/Screeno/Sprite-0002.png" class="robot" />
+
+    <!-- TYPEWRITER -->
+    <p id="dialogue"></p>
+
+    <!-- ENDING -->
+    <div id="ending" style="display: none; margin-top: 24px">
+      <h2>Apa yang akan dikatakan oleh kamu?</h2>
+      <button id="yesBtn">Yep, let's do it! :D</button>
+      <button id="noBtn" style="margin-left: 8px">
+        Sorry, it's a no no :(
+      </button>
+    </div>
+
+    <!-- FINAL SCREEN -->
+    <div id="finalScreen" class="finalScreen" style="display: none">
+      <h2 id="finalText"></h2>
+      <p style="margin-top: 8px">Screenshot this and send it to me ya 😊</p>
+      <p style="opacity: 0.6; font-size: 0.9rem; margin-top: 12px">
+        (Tap to close)
+      </p>
+    </div>
+
+    <!-- MUSIC -->
+    <audio
+      id="bgMusic"
+      src="items/Benson Boone - Beautiful Things  Piano Cover by Pianella Piano.mp3"
+      loop
+    ></audio>
+
+    <button id="musicToggle" class="musicBtn">▶</button>
+
+    <!-- SCRIPT -->
+    <script>
+      /* ==========================
+       DIALOGUE + SPRITES
+    ========================== */
+
+      const lines = [
+        "Click to start!",
+        "...",
+        "Sekarang, kamu tahu apa yang jadi pemikiranku lewat note yang telah ditulis.",
+        "Mungkin, kamu berpikir terlalu berlebihan untuk membuat ini semua sampai membuat page ini.",
+        "Mungkin, kamu berpikir melakukan hal ini adalah hal yang cringe.",
+        "Mungkin bahkan kamu berpikir... oh, cool. yauda.",
+        "Mungkin kamu memikirkan hal lain yang aku tidak bisa membacanya satu-persatu.",
+        "Tapi, aku hanya ingin kamu tahu bahwa aku serius untuk mau kenal lebih dekat, walaupun path dari apa yang akan kita jalani kedepan bukan sekedar garis linear.",
+        "Setidaknya aku mau untuk mengatakan hal ini dulu sebagai permulaan.",
+        "Aku harap,",
+        "Aku belum terlambat untuk mengatakan ini...",
+        "Boleh ga kita kenal lebih dekat?",
+      ];
+
+      const robotSprites = [
+        "items/Screeno/Sprite-0002.png",
+        "items/Screeno/Sprite-0003.png",
+        "items/Screeno/Sprite-0002.png",
+        "items/Screeno/Sprite-0004.png",
+        "items/Screeno/Sprite-0005.png",
+        "items/Screeno/Sprite-0006.png",
+        "items/Screeno/Sprite-0007.png",
+        "items/Screeno/Sprite-0008.png",
+        "items/Screeno/Sprite-0002.png",
+        "items/Screeno/Sprite-0006.png",
+        "items/Screeno/Sprite-0002.png",
+      ];
+
+      const dialogue = document.getElementById("dialogue");
+      const robotImg = document.getElementById("robotImg");
+      const ending = document.getElementById("ending");
+
+      let lineIndex = 0;
+      let charIndex = 0;
+      let typing = false;
+
+      function typeLine() {
+        typing = true;
+        const line = lines[lineIndex];
+        dialogue.innerHTML = line.slice(0, charIndex++);
+
+        if (charIndex <= line.length) {
+          setTimeout(typeLine, 32);
+        } else {
+          typing = false;
+        }
+      }
+
+      function nextLine() {
+        if (typing) return;
+        charIndex = 0;
+        lineIndex++;
+
+        // sprite change
+        robotImg.src = robotSprites[lineIndex] || robotSprites.at(-1);
+
+        // show ending
+        if (lineIndex === lines.length) {
+          ending.style.display = "block";
+          return;
+        }
+
+        dialogue.innerHTML = "";
+        typeLine();
+      }
+
+      /* ==========================
+       INTRO LOGIC
+    ========================== */
+
+      const introScreen = document.getElementById("introScreen");
+      const startBtn = document.getElementById("startBtn");
+
+      startBtn.onclick = () => {
+        introScreen.classList.add("slideUp");
+
+        setTimeout(() => {
+          introScreen.style.display = "none";
+          typeLine();
+          document.addEventListener("click", nextLine);
+        }, 850);
+      };
+
+      /* ==========================
+       ENDING
+    ========================== */
+
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const finalScreen = document.getElementById("finalScreen");
+      const finalText = document.getElementById("finalText");
+
+      yesBtn.onclick = () => showFinal("Yay! Thankyou for clicking this! 😄");
+      noBtn.onclick = () =>
+        showFinal("That's okay! 🙂\nThankyou for reading this sampai akhir!");
+
+      function showFinal(text) {
+        ending.style.display = "none";
+        finalText.textContent = text;
+        finalScreen.style.display = "flex";
+      }
+
+      finalScreen.onclick = () => {
+        finalScreen.style.display = "none";
+      };
+
+      /* ==========================
+       MUSIC
+    ========================== */
+
+      const music = document.getElementById("bgMusic");
+      const toggle = document.getElementById("musicToggle");
+      let musicStarted = false;
+
+      function startMusic() {
+        if (musicStarted) return;
+
+        music.volume = 0.65;
+        music
+          .play()
+          .then(() => {
+            toggle.textContent = "⏸";
+            musicStarted = true;
+          })
+          .catch(() => {
+            toggle.textContent = "▶";
+          });
+      }
+
+      toggle.addEventListener("click", () => {
+        if (!musicStarted) return startMusic();
+        if (music.paused) {
+          music.play();
+          toggle.textContent = "⏸";
+        } else {
+          music.pause();
+          toggle.textContent = "▶";
+        }
+      });
+
+      document.addEventListener("click", startMusic, { once: true });
+    </script>
+  </body>
+</html>

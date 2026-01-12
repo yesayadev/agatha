@@ -1,0 +1,107 @@
+/* MAIN DEFAULT */
+body {
+  background: #faf4de;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  padding: 40px 60px;
+  font-size: 19px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 10vh;
+  text-align: center;
+  margin: 0;
+}
+
+/* INTRO SCREEN */
+#introScreen {
+  position: fixed;
+  inset: 0;
+  background: #faf4de;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  z-index: 99999;
+}
+
+/* roll up animation */
+@keyframes slideUpAnim {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+.slideUp {
+  animation: slideUpAnim 0.85s ease forwards;
+}
+
+#introScreen button {
+  font-size: 18px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+/* ROBOT RESPONSIVE */
+.robot {
+  width: 25vw;
+  max-width: 330px;
+  min-width: 150px;
+  aspect-ratio: 1 / 1.2;
+  object-fit: contain;
+  margin: 1rem 0;
+}
+
+/* FINAL SCREEN */
+.finalScreen {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.96);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  z-index: 9999;
+}
+
+/* MUSIC BUTTON */
+.musicBtn {
+  position: fixed;
+  bottom: 14px;
+  right: 14px;
+  font-size: 1.3rem;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  cursor: pointer;
+  z-index: 999;
+}
+
+/* responsive tweaks */
+@media (max-width: 600px) {
+  body {
+    padding: 20px;
+    font-size: 17px;
+  }
+  .robot {
+    width: 40vw;
+  }
+}
+
+@media (max-width: 400px) {
+  .robot {
+    width: 50vw;
+  }
+}
